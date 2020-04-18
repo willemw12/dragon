@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define VERSION "1.1.1"
+#define VERSION "1.1.1 (willemw12's fork)"
 
 
 GtkWidget *window;
@@ -38,6 +38,8 @@ bool and_exit;
 bool keep;
 bool print_path = false;
 bool icons_only = false;
+char *title = "dragon";
+char *message = "Drag something here...";
 
 #define MODE_HELP 1
 #define MODE_TARGET 2
@@ -322,7 +324,7 @@ drag_data_received (GtkWidget          *widget,
 
 void add_target_button() {
     GtkWidget *label = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(label), "Drag something here...");
+    gtk_button_set_label(GTK_BUTTON(label), message);
     gtk_container_add(GTK_CONTAINER(vbox), label);
     GtkTargetList *targetlist = gtk_drag_dest_get_target_list(GTK_WIDGET(label));
     if (targetlist)
@@ -364,6 +366,8 @@ int main (int argc, char **argv) {
             printf("  --verbose,    -v  be verbose\n");
             printf("  --help            show help\n");
             printf("  --version         show version details\n");
+            printf("  --title,      -T  window title\n");
+            printf("  --message,    -M  drag-and-drop message\n");
             exit(0);
         } else if (strcmp(argv[i], "--version") == 0) {
             mode = MODE_VERSION;
@@ -393,6 +397,16 @@ int main (int argc, char **argv) {
         } else if (strcmp(argv[i], "-i") == 0
                 || strcmp(argv[i], "--icon-only") == 0) {
             icons_only = true;
+        } else if (strcmp(argv[i], "-T") == 0
+                || strcmp(argv[i], "--title") == 0) {
+            if (++i<argc) {
+                title = argv[i];
+            }
+        } else if (strcmp(argv[i], "-M") == 0
+                || strcmp(argv[i], "--message") == 0) {
+            if (++i<argc) {
+                message = argv[i];
+            }
         } else if (argv[i][0] == '-') {
             fprintf(stderr, "%s: error: unknown option `%s'.\n",
                     progname, argv[i]);
@@ -423,7 +437,7 @@ int main (int argc, char **argv) {
 
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
-    gtk_window_set_title(GTK_WINDOW(window), "dragon");
+    gtk_window_set_title(GTK_WINDOW(window), title);
 
     if (mode == MODE_TARGET) {
         target_mode();

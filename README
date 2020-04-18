@@ -1,3 +1,10 @@
+Fork
+----
+
+In this fork: add options to change the window title and drag-and-drop message.
+
+
+
 dragon - simple drag-and-drop source/sink for X
 
 Many programs, particularly web applications, expect files to be dragged
